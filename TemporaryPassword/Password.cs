@@ -5,7 +5,8 @@ namespace TemporaryPassword
 {
     public class Password
     {
-        readonly static Dictionary<object, string> _passwords = new Dictionary<object, string>();
+        private static readonly Dictionary<object, string> _passwords = new Dictionary<object, string>();
+        protected static Func<string> _generatePassword = () => Guid.NewGuid().ToString();
         public static string Create(object id)
         {
             return NewPassword(id);
@@ -18,7 +19,7 @@ namespace TemporaryPassword
 
         private static string NewPassword(object id)
         {
-            var password = Guid.NewGuid().ToString();
+            var password = _generatePassword();
             _passwords.Add(id, password);
             return password;
         }

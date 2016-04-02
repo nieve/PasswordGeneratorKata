@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TemporaryPassword
 {
@@ -12,29 +13,32 @@ namespace TemporaryPassword
 
     public class PasswordGenerator : IPasswordGenerator
     {
+        readonly Dictionary<object, string> _passwords = new Dictionary<object, string>();
         public string Create(int id)
         {
-            return NewPassword();
+            return NewPassword(id);
         }
 
         public string Create(Guid id)
         {
-            return NewPassword();
+            return NewPassword(id);
         }
 
         public string Create(object id)
         {
-            return NewPassword();
+            return NewPassword(id);
         }
 
         public bool Validate(object otherId, string password)
         {
-            throw new NotImplementedException();
+            return _passwords.ContainsKey(otherId);
         }
 
-        private static string NewPassword()
+        private string NewPassword(object id)
         {
-            return Guid.NewGuid().ToString();
+            var password = Guid.NewGuid().ToString();
+            _passwords.Add(id, password);
+            return password;
         }
     }
 }

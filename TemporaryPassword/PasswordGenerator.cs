@@ -1,4 +1,6 @@
-﻿namespace TemporaryPassword
+﻿using System;
+
+namespace TemporaryPassword
 {
     public interface IPasswordGenerator
     {
@@ -9,7 +11,7 @@
     {
         public string Create(int id)
         {
-            throw new System.NotImplementedException();
+            return Guid.NewGuid().ToString();
         }
     }
 }

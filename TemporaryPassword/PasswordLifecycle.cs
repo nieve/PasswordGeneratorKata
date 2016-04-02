@@ -18,15 +18,18 @@ namespace TemporaryPassword
             return NewPassword(id);
         }
 
-        public bool Validate(object otherId, string password)
+        public bool Validate(object id, string password)
         {
-            return _passwords.ContainsKey(otherId);
+            return _passwords.ContainsKey(id) && _passwords[id] == password;
         }
 
         private string NewPassword(object id)
         {
             var password = _generatePassword();
             if (_passwords.ContainsValue(password)) return NewPassword(id);
+
+            if (_passwords.ContainsKey(id)) return password;
+
             _passwords.Add(id, password);
             return password;
         }

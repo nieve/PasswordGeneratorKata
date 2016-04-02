@@ -42,5 +42,17 @@ namespace TemporaryPassword.Tests
 
             Assert.False(isValid);
         }
+
+        [Test]
+        public void invalidate_password_when_another_exists_for_the_specified_id()
+        {
+            var id = new object();
+            Subject.Create(id);
+            var newInvalidPassword = Subject.Create(id);
+
+            var isValid = Subject.Validate(id, newInvalidPassword);
+
+            Assert.False(isValid);
+        }
     }
 }

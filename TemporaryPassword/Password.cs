@@ -20,6 +20,7 @@ namespace TemporaryPassword
         private static string NewPassword(object id)
         {
             var password = _generatePassword();
+            if (_passwords.ContainsValue(password)) return NewPassword(id);
             _passwords.Add(id, password);
             return password;
         }

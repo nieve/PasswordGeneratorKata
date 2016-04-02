@@ -4,13 +4,14 @@ using NUnit.Framework;
 namespace TemporaryPassword.Tests
 {
     [TestFixture]
-    public class password_generator_should
+    public class password_lifecycle_should
     {
+        readonly PasswordLifecycle Subject = new PasswordLifecycle();
         [Test]
         public void create_password_for_int_id()
         {
             var id = 42;
-            var password = Password.Create(id);
+            var password = Subject.Create(id);
             Assert.NotNull(password);
         }
 
@@ -18,7 +19,7 @@ namespace TemporaryPassword.Tests
         public void create_password_for_guid_id()
         {
             var id = Guid.NewGuid();
-            var password = Password.Create(id);
+            var password = Subject.Create(id);
             Assert.NotNull(password);
         }
 
@@ -26,7 +27,7 @@ namespace TemporaryPassword.Tests
         public void create_password_for_object_id()
         {
             var id = new object();
-            var password = Password.Create(id);
+            var password = Subject.Create(id);
             Assert.NotNull(password);
         }
 
@@ -34,10 +35,10 @@ namespace TemporaryPassword.Tests
         public void invalidate_password_that_exists_for_another_user()
         {
             var anotherId = new object();
-            var password = Password.Create(anotherId);
+            var password = Subject.Create(anotherId);
             var id = new object();
 
-            var isValid = Password.Validate(id, password);
+            var isValid = Subject.Validate(id, password);
 
             Assert.False(isValid);
         }

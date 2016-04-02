@@ -7,6 +7,7 @@ namespace TemporaryPassword
         string Create(int id);
         string Create(Guid id);
         string Create(object id);
+        bool Validate(object otherId, string password);
     }
 
     public class PasswordGenerator : IPasswordGenerator
@@ -24,6 +25,11 @@ namespace TemporaryPassword
         public string Create(object id)
         {
             return NewPassword();
+        }
+
+        public bool Validate(object otherId, string password)
+        {
+            throw new NotImplementedException();
         }
 
         private static string NewPassword()

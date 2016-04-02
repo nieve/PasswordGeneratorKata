@@ -31,5 +31,15 @@ namespace TemporaryPassword.Tests
             var password = subject.Create(id);
             Assert.NotNull(password);
         }
+
+        [Test]
+        public void invalidate_password_existing_for_another_user()
+        {
+            var id = new object();
+            var password = subject.Create(id);
+            var otherId = new object();
+            var isValid = subject.Validate(otherId, password);
+            Assert.False(isValid);
+        }
     }
 }

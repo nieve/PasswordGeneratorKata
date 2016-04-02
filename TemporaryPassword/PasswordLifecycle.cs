@@ -5,7 +5,7 @@ namespace TemporaryPassword
 {
     public class PasswordLifecycle
     {
-        static readonly Dictionary<object, string> _passwords = new Dictionary<object, string>();
+        static readonly Dictionary<object, string> PasswordById = new Dictionary<object, string>();
         readonly Func<string> _generatePassword;
 
         public PasswordLifecycle(Func<string> generatePassword = null)
@@ -20,18 +20,28 @@ namespace TemporaryPassword
 
         public bool Validate(object id, string password)
         {
-            return _passwords.ContainsKey(id) && _passwords[id] == password;
+            return IdHasPassword(id) && PasswordById[id] == password;
         }
 
         private string NewPassword(object id)
         {
             var password = _generatePassword();
-            if (_passwords.ContainsValue(password)) return NewPassword(id);
+            if (PasswordTaken(password)) return NewPassword(id);
 
-            if (_passwords.ContainsKey(id)) return password;
+            if (IdHasPassword(id)) return password;
 
-            _passwords.Add(id, password);
+            PasswordById.Add(id, password);
             return password;
+        }
+
+        private static bool PasswordTaken(string password)
+        {
+            return PasswordById.ContainsValue(password);
+        }
+
+        private static bool IdHasPassword(object id)
+        {
+            return PasswordById.ContainsKey(id);
         }
     }
 }

@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace TemporaryPassword.Tests
 {
-    public class when_password_lifecycle_already_exists_should
+    public class when_password_already_exists
     {
         private static int _count = 0;
         private static readonly string SomePassword = "some password";
@@ -15,7 +15,7 @@ namespace TemporaryPassword.Tests
         }
 
         [Test]
-        public void use_another_password()
+        public void then_it_should_use_another_password()
         {
             var id = new object();
             var password = Subject.Create(id);

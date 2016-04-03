@@ -14,7 +14,7 @@ namespace TemporaryPassword
 
         public PasswordLifecycle(Func<string> generatePassword = null, int passwordLifetime = 30000)
         {
-            _generatePassword = generatePassword ?? (() => Guid.NewGuid().ToString());
+            _generatePassword = generatePassword ?? (() => Convert.ToBase64String(Guid.NewGuid().ToByteArray()));
             _passwordLifetime = passwordLifetime;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TemporaryPassword
 {
@@ -7,10 +8,14 @@ namespace TemporaryPassword
     {
         static readonly Dictionary<object, string> PasswordById = new Dictionary<object, string>();
         readonly Func<string> _generatePassword;
+        private readonly int _passwordLifetime;
 
-        public PasswordLifecycle(Func<string> generatePassword = null)
+        public int PasswordLifetime => _passwordLifetime;
+
+        public PasswordLifecycle(Func<string> generatePassword = null, int passwordLifetime = 30000)
         {
             _generatePassword = generatePassword ?? (() => Guid.NewGuid().ToString());
+            _passwordLifetime = passwordLifetime;
         }
 
         public string Create(object id)
@@ -31,6 +36,11 @@ namespace TemporaryPassword
             if (IdHasPassword(id)) return password;
 
             PasswordById.Add(id, password);
+
+            Task.Delay(_passwordLifetime)
+                .ContinueWith(t => { if (PasswordById.ContainsKey(id)) PasswordById.Remove(id); })
+                .ConfigureAwait(false).GetAwaiter();
+
             return password;
         }
 

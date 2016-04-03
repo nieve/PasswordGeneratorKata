@@ -36,12 +36,16 @@ namespace TemporaryPassword
             if (IdHasPassword(id)) return password;
 
             PasswordById.Add(id, password);
-
-            Task.Delay(_passwordLifetime)
-                .ContinueWith(t => { if (PasswordById.ContainsKey(id)) PasswordById.Remove(id); })
-                .ConfigureAwait(false).GetAwaiter();
+            SchedulePasswordExpiryFor(id);
 
             return password;
+        }
+
+        private async Task SchedulePasswordExpiryFor(object id)
+        {
+            await Task.Delay(_passwordLifetime)
+                .ContinueWith(t => { if (PasswordById.ContainsKey(id)) PasswordById.Remove(id); })
+                .ConfigureAwait(false);
         }
 
         private static bool PasswordTaken(string password)

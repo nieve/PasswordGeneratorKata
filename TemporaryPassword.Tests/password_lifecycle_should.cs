@@ -58,11 +58,18 @@ namespace TemporaryPassword.Tests
         [Test]
         public void invalidate_password_after_expiry()
         {
-            PasswordLifecycle subject = new PasswordLifecycle(passwordLifetime:1000);
+            var subject = new PasswordLifecycle(passwordLifetime:1000);
             var id = new object();
             var password = subject.Create(id);
 
             Assert.That(()=> subject.Validate(id, password), Is.False.After(1010));
+        }
+
+        [Test]
+        public void have_password_lifetime_set_to_30_seconds_by_default()
+        {
+            var subject = new PasswordLifecycle();
+            Assert.AreEqual(TimeSpan.FromSeconds(30).TotalMilliseconds, subject.PasswordLifetime);
         }
     }
 }
